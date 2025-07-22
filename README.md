@@ -12,7 +12,7 @@ Features
     
 *   Attaches your resume (PDF) to each email.
     
-*   Updates a sent\_flag in the database for each successfully sent email.
+*   Updates a is_mail_sent in the database for each successfully sent email.
     
 *   Limits the number of emails sent per daily run (e.g., 100 emails) to manage deliverability and avoid spam flags.
     
@@ -77,21 +77,21 @@ This project uses SQLite, a file-based database. You need to create the database
 
 1.  **Download DB Browser for SQLite:** This is a free, visual tool that makes managing SQLite databases easy. Download from [sqlitebrowser.org/dl/](https://sqlitebrowser.org/dl/).
     
-2.  **Create New Database:** Open DB Browser for SQLite. Go to File > New Database. Save the file as hr\_emails.db in your project's root directory (the same folder as email\_automator.py).
+2.  **Create New Database:** Open DB Browser for SQLite. Go to File > New Database. Save the file as hr_emails.db in your project's root directory (the same folder as script.py).
     
 3.  ```sql
-    CREATE TABLE hr\_contacts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, email TEXT UNIQUE, sent\_flag INTEGER DEFAULT 0, last\_sent\_date TEXT);
+    CREATE TABLE company_wise_hr_contacts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, email TEXT UNIQUE, is_mail_sent INTEGER DEFAULT 0, last_sent_date TEXT);
     ```
     Click the "Execute SQL" button (usually a play icon).
     
-4.  **Populate Data:** Go to the "Browse Data" tab. Select the hr\_contacts table from the dropdown. Use the "New Record" button to manually add your HR contact details (Name, Company, Email). Ensure sent\_flag is set to 0 for all new contacts you want to send emails to.
+4.  **Populate Data:** Go to the "Browse Data" tab. Select the company_wise_hr_contacts table from the dropdown. Use the "New Record" button to manually add your HR contact details (Name, Company, Email). Ensure is_mail_sent is set to 0 for all new contacts you want to send emails to.
     
-5.  **Write Changes:** After adding data, click File > Write Changes (or the "Write Changes" icon) to save everything to your hr\_emails.db file.
+5.  **Write Changes:** After adding data, click File > Write Changes (or the "Write Changes" icon) to save everything to your hr_emails.db file.
     
 
 #### b. (Optional) Initial Data Import from CSV
 
-If you have a large hrs.csv file, you could use a one-time Python script to import data into the hr\_emails.db after creating the table._(Note: The main email\_automator.py\` script does NOT handle CSV import automatically; you'd use a separate utility script for that.)_
+If you have a large hrs.csv file, you could use a one-time Python script to import data into the hr_emails.db after creating the table._(Note: The main script.py script does NOT handle CSV import automatically; you'd use a separate utility script for that.)_
 
 ### 5\. Environment Variables Setup
 
@@ -99,7 +99,7 @@ Sensitive information is stored in environment variables, loaded from a .env fil
 
 #### a. Create .env File
 
-In your project's root directory (the same folder as email\_automator.py), create a new file named **.env**.
+In your project's root directory (the same folder as script.py), create a new file named **.env**.
 
 #### b. Add Credentials to .env
 
@@ -123,11 +123,11 @@ YOUR_LINKEDEDIN_URL="https://www.linkedin.com/in/yourprofile" # Your full Linked
         
     *   Select "Mail" for the app and "Other (Custom name)" for the device. Give it a name like "HR Email Sender".
         
-    *   Generate the password and use the 16-character code as your SENDER\_PASSWORD.
+    *   Generate the password and use the 16-character code as your SENDER_PASSWORD.
         
-*   **File Paths:** Ensure RESUME\_PATH is the **absolute path** to your resume PDF file. Use forward slashes (/) even on Windows paths.
+*   **File Paths:** Ensure RESUME_PATH is the **absolute path** to your resume PDF file. Use forward slashes (/) even on Windows paths.
     
-*   **Personalization:** YOUR\_FULL\_NAME, YOUR\_PHONE\_NUMBER, and YOUR\_LINKEDIN\_URL will be used to personalize the email body.
+*   **Personalization:** YOUR_NAME, YOUR_PHONE_NUMBER, and YOUR_LINKEDIN_URL will be used to personalize the email body.
     
 
 #### c. Update .gitignore
@@ -154,13 +154,13 @@ Once all the setup steps are complete:
 2.  Bashpython script.py
     
 
-The script will read from your hr\_emails.db, send emails to unsent contacts (up to the daily limit), and update their status in the database.
+The script will read from your hr_emails.db, send emails to unsent contacts (up to the daily limit), and update their status in the database.
 
 ### Daily Scheduling (Optional)
 
 The script includes commented-out code for daily scheduling using the schedule library. If you want it to run automatically every day at a specific time:
 
-1.  **Uncomment** the schedule.every().day.at(...) and while True: blocks at the bottom of email\_automator.py.
+1.  **Uncomment** the schedule.every().day.at(...) and while True: blocks at the bottom of script.py.
     
 2.  **Adjust the time** ("09:00") to your desired daily sending time.
     
@@ -170,9 +170,9 @@ The script includes commented-out code for daily scheduling using the schedule l
 Customization
 -------------
 
-*   **Daily Email Limit:** Adjust the limit parameter in get\_unsent\_contacts(limit=100) within the automated\_job\_application\_with\_db function to control how many emails are sent per run.
+*   **Daily Email Limit:** Adjust the limit parameter in get_unsent_contacts(limit=100) within the automated_job_application_with_db function to control how many emails are sent per run.
     
-*   **Email Content:** Modify the html\_body string within the create\_email function to change the email's message, introduce more variables, or change bolded text.
+*   **Email Content:** Modify the HTML body string within the create_email function to change the email's message, introduce more variables, or change bolded text.
     
 *   **Delay:** Adjust time.sleep(5) within the main loop to increase or decrease the delay between sending each email. A longer delay reduces spam risk but slows down the process.
 
