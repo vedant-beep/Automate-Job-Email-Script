@@ -79,7 +79,10 @@ This project uses SQLite, a file-based database. You need to create the database
     
 2.  **Create New Database:** Open DB Browser for SQLite. Go to File > New Database. Save the file as hr\_emails.db in your project's root directory (the same folder as email\_automator.py).
     
-3.  SQLCREATE TABLE hr\_contacts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, email TEXT UNIQUE, sent\_flag INTEGER DEFAULT 0, last\_sent\_date TEXT);Click the "Execute SQL" button (usually a play icon).
+3.  ```sql
+    CREATE TABLE hr\_contacts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, email TEXT UNIQUE, sent\_flag INTEGER DEFAULT 0, last\_sent\_date TEXT);
+    ```
+    Click the "Execute SQL" button (usually a play icon).
     
 4.  **Populate Data:** Go to the "Browse Data" tab. Select the hr\_contacts table from the dropdown. Use the "New Record" button to manually add your HR contact details (Name, Company, Email). Ensure sent\_flag is set to 0 for all new contacts you want to send emails to.
     
